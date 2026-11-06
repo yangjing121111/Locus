@@ -13,14 +13,14 @@ enum LocationEngineError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .invalidIP: return "Tunnel IP is invalid. Check Settings → Tunnel IP (usually 10.7.0.1)."
-        case .pairingRead: return "Could not read the RPPairing file. Generate one with idevice_pair in RPPairing mode."
-        case .tunnelCreate: return "Could not open the developer tunnel. Is LocalDevVPN connected on Wi‑Fi?"
-        case .remoteServer: return "Connected to the tunnel but RemoteXPC handshake failed."
-        case .simulationCreate: return "Could not open Apple’s location simulation service."
-        case .locationSet: return "Failed to set simulated coordinates."
-        case .locationClear: return "Failed to clear simulated location."
-        case .notActive: return "No active simulation session."
+        case .invalidIP: return "隧道 IP 无效。请检查 设置 → 隧道 IP（通常是 10.7.0.1）。"
+        case .pairingRead: return "无法读取 RPPairing 配对文件。请用 idevice_pair 的 RPPairing 模式重新生成。"
+        case .tunnelCreate: return "无法打开开发者隧道。请确认已连接 Wi‑Fi，并且 LocalDevVPN 已开启。"
+        case .remoteServer: return "已连上隧道，但 RemoteXPC 握手失败。"
+        case .simulationCreate: return "无法打开苹果的定位模拟服务。"
+        case .locationSet: return "设置模拟坐标失败。"
+        case .locationClear: return "清除模拟定位失败。"
+        case .notActive: return "当前没有正在进行的模拟。"
         }
     }
 
@@ -59,9 +59,13 @@ enum LocationEngine {
     static var isSessionActive: Bool { locationSimulation != nil }
 
     static func set(latitude: Double, longitude: Double, pairingPath: String, deviceIP: String) -> Result<Void, LocationEngineError> {
-        var result: Result<Void, LocationEngineError> = .failure(.locationSet)
-        queue.sync {
-            let code = setLocked(latitude: latitude, longitude: longitude, pairingPath: pairingPath, deviceIP: deviceIP)
+        var result: Result<Void, LocationEngineError> = .failure(.locationSet) // 默认结果为"设置失败"
+        let fixEnabled = (UserDefaults.standard.object(forKey: "chinaCoordinateFix") as? Bool) ?? true // 读取"中国坐标修正"开关，默认开启
+        let target = fixEnabled // 根据开关决定最终要注入系统的坐标
+            ? ChinaCoordinate.gcj02ToWGS84(latitude: latitude, longitude: longitude) // 开启：把地图坐标(GCJ-02)转成系统坐标(WGS-84)
+            : (latitude: latitude, longitude: longitude) // 关闭：原样使用地图坐标
+        queue.sync { // 在专用串行队列里同步执行，避免多线程同时操作定位服务
+            let code = setLocked(latitude: target.latitude, longitude: target.longitude, pairingPath: pairingPath, deviceIP: deviceIP) // 把修正后的坐标发给手机定位服务，返回错误码
             result = code == ok ? .success(()) : .failure(.from(code: code))
         }
         return result

@@ -30,7 +30,7 @@ struct RootView: View {
             get: { session.lastError != nil },
             set: { if !$0 { session.lastError = nil } }
         )) {
-            Button("OK", role: .cancel) { session.lastError = nil }
+            Button("好", role: .cancel) { session.lastError = nil }
         } message: {
             Text(session.lastError ?? "")
         }
@@ -54,13 +54,13 @@ struct StatusBarView: View {
         case .idle:
             return tunnelConnected ? .notSpoofing : .connectVPN
         case .connecting:
-            return .status("Connecting…")
+            return .status("连接中…")
         case .active:
-            return .status("Spoofing")
+            return .status("模拟中")
         case .reconnecting:
-            return .status("Reconnecting…")
+            return .status("重新连接中…")
         case .dropped(let reason):
-            return .status(reason.isEmpty ? "Disconnected" : "Disconnected — \(reason)")
+            return .status(reason.isEmpty ? "已断开" : "已断开 — \(reason)")
         }
     }
 
@@ -82,8 +82,8 @@ struct StatusBarView: View {
 
     private var title: String {
         switch display {
-        case .notSpoofing: return "Not Spoofing"
-        case .connectVPN: return "Connect LocalDevVPN"
+        case .notSpoofing: return "未在模拟"
+        case .connectVPN: return "请连接 LocalDevVPN"
         case .status(let text): return text
         }
     }
@@ -224,7 +224,7 @@ struct BottomControlsView: View {
                     Button {
                         session.stop(pairing: pairing)
                     } label: {
-                        Text("Stop")
+                        Text("停止")
                             .font(.subheadline.weight(.bold))
                             .foregroundStyle(.white)
                             .frame(minWidth: 72)
@@ -237,12 +237,12 @@ struct BottomControlsView: View {
                 } else {
                     Button {
                         guard let pin = session.pin else {
-                            session.lastError = "Tap the map to drop a pin first."
+                            session.lastError = "请先点击地图放置大头针。"
                             return
                         }
                         session.teleport(to: pin, pairing: pairing)
                     } label: {
-                        Text("Teleport")
+                        Text("传送")
                             .font(.subheadline.weight(.bold))
                             .foregroundStyle(.black)
                             .frame(minWidth: 96)

@@ -39,11 +39,11 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Locus uses your real location so you can aim the map and return home after teleporting.</string>
+	<string>Locus 需要你的真实位置，用于在地图上定位，以及传送后回到真实位置。</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Locus keeps a light location session alive so simulated GPS can stay active in the background.</string>
+	<string>Locus 会保持一个轻量的定位会话，让虚拟定位在后台也能持续有效。</string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Locus uses the local network to advertise as a pairable host (iOS 27 pairing) and to reach the developer tunnel (LocalDevVPN) for GPS override.</string>
+	<string>Locus 使用本地网络连接开发者隧道（LocalDevVPN）来修改定位，并在 iOS 27 上作为可配对主机广播。</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_remotepairing._tcp</string>

@@ -11,10 +11,10 @@ enum TravelMode: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .walk: return "Walk"
+        case .walk: return "步行"
         case .run: return "Run"
-        case .cycle: return "Cycle"
-        case .drive: return "Drive"
+        case .cycle: return "骑行"
+        case .drive: return "驾车"
         }
     }
 
@@ -54,11 +54,11 @@ enum SpoofStatus: Equatable {
 
     var label: String {
         switch self {
-        case .idle: return "Not Spoofing"
-        case .connecting: return "Starting…"
-        case .active: return "Spoofing"
-        case .reconnecting: return "Reconnecting…"
-        case .dropped: return "Interrupted"
+        case .idle: return "未在模拟"
+        case .connecting: return "启动中…"
+        case .active: return "模拟中"
+        case .reconnecting: return "重新连接中…"
+        case .dropped: return "已中断"
         }
     }
 
@@ -106,7 +106,7 @@ final class SpoofSession: ObservableObject {
 
     func teleport(to coordinate: CLLocationCoordinate2D, pairing: PairingStore) {
         guard pairing.hasPairingFile else {
-            lastError = "Import an RPPairing file in Settings first."
+            lastError = "请先在设置里导入 RPPairing 配对文件。"
             return
         }
         pin = coordinate
@@ -149,12 +149,12 @@ final class SpoofSession: ObservableObject {
 
     func startJoystick(pairing: PairingStore) {
         guard pairing.hasPairingFile else {
-            lastError = "Import an RPPairing file in Settings first."
+            lastError = "请先在设置里导入 RPPairing 配对文件。"
             return
         }
         let start = simulated ?? pin ?? locationKeeper.lastKnownCoordinate
         guard let start else {
-            lastError = "Drop a pin or teleport somewhere before using the joystick."
+            lastError = "使用摇杆前，请先在地图上放置大头针或先传送到某处。"
             return
         }
         if simulated == nil {
@@ -415,7 +415,7 @@ final class SpoofSession: ObservableObject {
     private func postDropNotification(_ message: String) {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound]) { _, _ in }
         let content = UNMutableNotificationContent()
-        content.title = "Locus spoof dropped"
+        content.title = "Locus 虚拟定位已中断"
         content.body = message
         content.sound = .default
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)

@@ -23,11 +23,11 @@ struct PairOnDeviceView: View {
                 NavigationStack {
                     scrollContent
                         .background(Color.black.ignoresSafeArea())
-                        .navigationTitle("Pair on this iPhone")
+                        .navigationTitle("在本机上配对")
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
-                                Button("Close") {
+                                Button("关闭") {
                                     host.resetToIdle()
                                     dismiss()
                                 }
@@ -75,9 +75,9 @@ struct PairOnDeviceView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("No computer needed")
+            Text("不需要电脑")
                 .font(.title2.weight(.bold))
-            Text("Locus advertises a pairable host. iOS connects from Developer Mode, then Locus shows a 6-digit code for you to type.")
+            Text("Locus 会作为可配对主机出现。iOS 在开发者模式里连接后，Locus 会显示一个 6 位数字码供你输入。")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
@@ -85,9 +85,9 @@ struct PairOnDeviceView: View {
 
     private var embeddedIntro: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Follow these steps")
+            Text("请按以下步骤操作")
                 .font(.headline)
-            Text("Keep Locus open. You’ll leave briefly for Settings, then come back with a code.")
+            Text("保持 Locus 打开。你会暂时去设置里操作，然后带着码回来。")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
@@ -95,10 +95,10 @@ struct PairOnDeviceView: View {
 
     private var steps: some View {
         VStack(alignment: .leading, spacing: 12) {
-            step(1, "Tap Start pairing and allow Local Network + Location when asked.")
-            step(2, "Allow notifications — the code can appear as a banner over Settings.")
-            step(3, "Open Settings › Privacy & Security › Developer Mode › Pair with Locus → Pair.")
-            step(4, "Enter your unlock passcode first. On the next prompt, type Locus’s 6-digit code.")
+            step(1, "点“开始配对”，并在提示时允许本地网络和定位。")
+            step(2, "允许通知——配对码会以横幅形式显示在设置界面上方。")
+            step(3, "打开 设置 › 隐私与安全性 › 开发者模式 › 与 Locus 配对 → 配对。")
+            step(4, "先输入开机密码；下一个弹窗里输入 Locus 显示的 6 位数字码。")
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -120,10 +120,10 @@ struct PairOnDeviceView: View {
 
     private var tipCard: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Label("If the code isn’t here yet", systemImage: "lightbulb.fill")
+            Label("如果码还没出现", systemImage: "lightbulb.fill")
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(LocusTheme.accentSecondary)
-            Text("Keep the app listening while you confirm in Developer Mode. Don’t force-quit. If “Pair with Locus” vanishes, stop/start pairing and reopen Developer Mode.")
+            Text("在开发者模式里确认时请保持 App 在监听。不要强制退出。如果“与 Locus 配对”消失，请停止后重新开始配对，并重新打开开发者模式。")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -137,25 +137,25 @@ struct PairOnDeviceView: View {
         VStack(spacing: 14) {
             switch host.phase {
             case .idle:
-                Label("Ready when you are", systemImage: "antenna.radiowaves.left.and.right")
+                Label("准备就绪", systemImage: "antenna.radiowaves.left.and.right")
                     .foregroundStyle(.secondary)
             case .advertising:
                 ProgressView()
-                Text("Waiting for Settings…")
+                Text("等待设置里的操作…")
                     .font(.headline)
-                Text("In Developer Mode tap Pair with Locus → Pair.")
+                Text("在开发者模式里点“与 Locus 配对”→“配对”。")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             case .deviceConnected:
                 ProgressView()
-                Text("iPhone connected")
+                Text("iPhone 已连接")
                     .font(.headline)
-                Text("Generating your 6-digit code…")
+                Text("正在生成 6 位数字码…")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             case .awaitingPIN(let pin):
-                Text("Enter this code in Settings")
+                Text("请在设置里输入这个码")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 Text(pin)
@@ -164,7 +164,7 @@ struct PairOnDeviceView: View {
                     .monospacedDigit()
                     .foregroundStyle(LocusTheme.accent)
                     .textSelection(.enabled)
-                Text("Second prompt only — after your unlock passcode.")
+                Text("仅在第二次弹窗输入——第一次先输入开机密码。")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -172,11 +172,11 @@ struct PairOnDeviceView: View {
                 Image(systemName: "checkmark.seal.fill")
                     .font(.largeTitle)
                     .foregroundStyle(LocusTheme.statusGood)
-                Text("Paired")
+                Text("已配对")
                     .font(.title3.weight(.bold))
                 Text(mode == .embedded
-                     ? "Next we’ll set up LocalDevVPN."
-                     : "RPPairing file saved. Connect LocalDevVPN, then teleport.")
+                     ? "接下来设置 LocalDevVPN。"
+                     : "RPPairing 文件已保存。请连接 LocalDevVPN，然后开始传送。")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -184,7 +184,7 @@ struct PairOnDeviceView: View {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.largeTitle)
                     .foregroundStyle(LocusTheme.statusWarn)
-                Text("Pairing failed")
+                Text("配对失败")
                     .font(.title3.weight(.bold))
                 Text(message)
                     .font(.footnote)
@@ -205,7 +205,7 @@ struct PairOnDeviceView: View {
                 host.acknowledgeFailure()
                 host.start(pairingStore: pairing)
             } label: {
-                Text(host.phase == .idle ? "Start pairing" : "Try again")
+                Text(host.phase == .idle ? "开始配对" : "重试")
                     .font(.headline)
                     .foregroundStyle(.black)
                     .frame(maxWidth: .infinity)
@@ -222,7 +222,7 @@ struct PairOnDeviceView: View {
                     dismiss()
                 }
             } label: {
-                Text(mode == .embedded ? "Continue" : "Done")
+                Text(mode == .embedded ? "继续" : "完成")
                     .font(.headline)
                     .foregroundStyle(.black)
                     .frame(maxWidth: .infinity)
@@ -234,9 +234,9 @@ struct PairOnDeviceView: View {
         case .advertising, .deviceConnected, .awaitingPIN:
             Text({
                 switch host.phase {
-                case .awaitingPIN: return "Type the code above into the second Settings prompt."
-                case .deviceConnected: return "Connected — code coming next."
-                default: return "Waiting for iOS to connect… don’t force-quit Locus."
+                case .awaitingPIN: return "把上面的码输入设置里的第二个弹窗。"
+                case .deviceConnected: return "已连接——马上显示配对码。"
+                default: return "等待 iOS 连接…请不要强制退出 Locus。"
                 }
             }())
                 .font(.caption)

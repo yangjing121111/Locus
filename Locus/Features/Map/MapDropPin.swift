@@ -15,7 +15,7 @@ struct MapDropPin: View {
         VStack(spacing: 8) {
             if selected && !isDragging {
                 Button(action: onRemove) {
-                    Label("Remove Pin", systemImage: "trash.fill")
+                    Label("移除大头针", systemImage: "trash.fill")
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(LocusTheme.danger)
                         .padding(.horizontal, 14)
@@ -44,8 +44,8 @@ struct MapDropPin: View {
         .animation(.spring(response: 0.28, dampingFraction: 0.78), value: selected)
         .animation(.easeOut(duration: 0.15), value: isDragging)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(selected ? "Selected pin" : "Map pin")
-        .accessibilityHint("Tap to show remove. Touch and hold to drag.")
+        .accessibilityLabel(selected ? "已选中的大头针" : "地图大头针")
+        .accessibilityHint("点击显示移除按钮，长按可拖动。")
     }
 
     private var dragGesture: some Gesture {

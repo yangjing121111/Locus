@@ -17,17 +17,17 @@ struct RoutePlannerSheet: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("Road route") {
-                    Button("Use current pin / spoof as start") {
+                Section("道路路线") {
+                    Button("用当前大头针/模拟位置作为起点") {
                         start = session.simulated ?? session.pin
                     }
-                    Button("Use current pin as end") {
+                    Button("用当前大头针作为终点") {
                         end = session.pin
                     }
-                    LabeledContent("Start") {
+                    LabeledContent("起点") {
                         Text(coordText(start)).font(.caption.monospaced())
                     }
-                    LabeledContent("End") {
+                    LabeledContent("终点") {
                         Text(coordText(end)).font(.caption.monospaced())
                     }
                     Button {
@@ -36,39 +36,39 @@ struct RoutePlannerSheet: View {
                         if isRouting {
                             ProgressView()
                         } else {
-                            Label("Build walk/drive route on roads", systemImage: "road.lanes")
+                            Label("按道路生成步行/驾车路线", systemImage: "road.lanes")
                         }
                     }
                     .disabled(isRouting)
                 }
 
-                Section("Play / draw / GPX") {
+                Section("播放 / 绘制 / GPX") {
                     Button {
                         onUseDrawn()
                     } label: {
-                        Label("Use drawn path from map", systemImage: "pencil.tip")
+                        Label("使用地图上绘制的路径", systemImage: "pencil.tip")
                     }
                     Button(action: onPlay) {
-                        Label("Follow route", systemImage: "play.fill")
+                        Label("按路线移动", systemImage: "play.fill")
                     }
                     Button(action: onImportGPX) {
-                        Label("Import GPX", systemImage: "square.and.arrow.down")
+                        Label("导入 GPX", systemImage: "square.and.arrow.down")
                     }
                     Button(action: onExportGPX) {
-                        Label("Export GPX", systemImage: "square.and.arrow.up")
+                        Label("导出 GPX", systemImage: "square.and.arrow.up")
                     }
                 }
 
                 Section {
-                    Text("Routes follow Apple Maps roads/footpaths for the selected travel mode. Speed gets light random variation so motion looks less robotic.")
+                    Text("路线按所选出行方式沿苹果地图的道路/步道生成。速度会有轻微随机变化，让移动看起来更自然。")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle("Routes")
+            .navigationTitle("路线")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Done") { dismiss() }
+                    Button("完成") { dismiss() }
                 }
             }
         }
